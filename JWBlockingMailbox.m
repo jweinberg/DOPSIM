@@ -7,7 +7,7 @@
 
 @interface JWBlockingMailbox ()
 @property (retain) CFMutableDictionaryRef map __attribute__((NSObject));
-@property (retain) NSConditionLock *condition;
+@property (retain) NSCondition *condition;
 @end
 
 
@@ -19,6 +19,7 @@
     if ((self = [super init]))
     {
         self.map = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
+		self.condition = [[[NSCondition alloc] init] autorelease];
     }
     return self;
 }
