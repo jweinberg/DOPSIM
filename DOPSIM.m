@@ -42,6 +42,7 @@ JWReduceOp minOperation =  ^(NSNumber * a, NSNumber * b){ return [a compare:b] =
 @property (retain) JWBlockingMailbox *queue;
 @property (copy) JWTopology topology;
 @property (assign) NSUInteger numberOfNodes;
+@property (assign) NSUInteger rank;
 @end
 
 @implementation DOPSIM
@@ -147,6 +148,36 @@ JWReduceOp minOperation =  ^(NSNumber * a, NSNumber * b){ return [a compare:b] =
     id result = [self allToOneReduce:value to:0 operation:op];
     result = [self oneToAllBroadcast:result from:0];
     return result;
+}
+
+- (id)scatter:(NSArray*)value from:(NSUInteger)source;
+{
+	NSUInteger p = self.numberOfNodes;
+	if (self.rank == source)
+	{
+		NSUInteger n = [value count]/p;
+		for (int i = 0; i < p-1; ++i)
+			[self send:[value subarrayWithRange:NSMakeRange(i*n, n)]
+					to:i];
+		[self send:[value subarrayWithRange:NSMakeRange(n*(p-1), [value count] - n*(p-1))]
+				to:p-1];
+	}
+	return [self receive:source];
+}
+
+- (id)gather:(NSArray*)value to:(NSUInteger)destination;
+{
+	NSUInteger p = self.numberOfNodes;
+	NSMutableArray *result = [NSMutableArray array];
+	[self send:value to:destination];
+	if (self.rank == destination)
+	{
+		for (int i = 0; i < p; ++i)
+		{
+			[result addObjectsFromArray:[self receive:i]];
+		}
+	}
+	return result;
 }
 
 static NSUInteger runningThreads = 0;
