@@ -23,6 +23,7 @@ extern JWReduceOp minOperation;
 @interface DOPSIM : NSObject
 @property (readonly, assign) NSUInteger rank;
 @property (readonly, assign) NSUInteger numberOfNodes;
+
 - (oneway void)send:(id)data to:(NSUInteger)aRank;
 - (id)oneToAllBroadcast:(id)data from:(NSUInteger)source;
 - (id)allToOneCollect:(id)data to:(NSUInteger)destination;

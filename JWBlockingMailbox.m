@@ -19,7 +19,7 @@
     if ((self = [super init]))
     {
         self.map = CFDictionaryCreateMutable(NULL, 0, NULL, &kCFTypeDictionaryValueCallBacks);
-		self.condition = [[[NSCondition alloc] init] autorelease];
+		//self.condition = [[[NSCondition alloc] init] autorelease];
     }
     return self;
 }

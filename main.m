@@ -57,9 +57,14 @@ int main (int argc, const char * argv[])
 			id tmp = v;
 			v = u;
 			u = tmp;
-			if (psim.rank == 1)
-				NSLog(@"%d) %@", t, [u objectAtIndex:3]);
+			//if (psim.rank == 1)
+			//	printf("%d) %f\n", t, [[u objectAtIndex:3] floatValue]);
 		}
+		
+		NSArray *trimmed = [u subarrayWithRange:NSMakeRange(1, [u count]-1)];
+		NSArray *final = [psim gather:trimmed to:0];
+		if (psim.rank == 0)
+			NSLog(@"%@", final);
 		
     }];
     
