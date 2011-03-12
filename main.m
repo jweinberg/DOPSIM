@@ -6,9 +6,9 @@ int p = 3;
 
 double alpha = 0.001;
 double a = 0.1; //.mm
-double h = 1.0; //.minutes
+double h = 2.0; //.minutes
 int n = 12;
-int n_timesteps = 1000;
+int n_timesteps = 100;
 
 int main (int argc, const char * argv[]) 
 {
